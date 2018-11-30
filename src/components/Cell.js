@@ -1,14 +1,15 @@
 import React from 'react';
 
 export default (props) => {
-  const { value, placingShip } = props
+  const { cell, placingShip, ship } = props
+  const className = placingShip ? `${ship}` : ''
   return (
     <td
-      className={placingShip ? 'placeShip' : ''}
-      value={value}
-      id={value}
+      className={className}
+      id={cell}
       onClick={(e) => props.handleClick(e)}
       onMouseEnter={(e) => props.handleHover(e)}
-    ></td>
+    >
+    </td>
   )
 }

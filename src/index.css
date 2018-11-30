@@ -14,6 +14,7 @@ code {
 }
 
 table {
+  margin: 1em auto 0;
   border-collapse: collapse;
   border-spacing: 0;
 }
@@ -29,6 +30,14 @@ td {
   border: 1px solid grey;
 }
 
-.placeShip {
+select {
+  text-transform: capitalize;
+}
+
+.carrier,
+.battleship,
+.cruiser,
+.submarine,
+.destroyer {
   background: lightgrey;
 }

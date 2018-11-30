@@ -18,12 +18,54 @@ export class Board extends Component {
   }
 
   handleClick = (e) => {
-    this.setState({ cellClicked: e.target.getAttribute('value') },
-      () => console.log('clicked:', this.state.cellClicked))
+    const cell = e.target.getAttribute('id')
+    const action = this.props.action
+
+    switch(action) {
+      case 'placeShip':
+        this.placeShip(cell)
+        break;
+      default:
+        break
+    }
+
+    this.setState({
+      cellClicked: cell,
+      action: action
+    }, () => console.log('clicked:', this.state.cellClicked))
+
+    this.updateCellState(cell)
+  }
+
+  placeShip = () => {
+    const ship = Object.assign({}, this.props.shipSelected)
+    ship.placement = this.state.placingShip
+    this.props.placeShip(ship)
+  }
+
+  updateCellState = (x) => {
+    let cell;
+    let state = ''
+    switch(state) {
+      case 0:
+        cell = '*'
+        break;
+      case 1:
+        cell = '%'
+        break;
+      case 2:
+        cell = 'X'
+        break;
+      default:
+        cell = ''
+        break;
+    }
+    console.log('updated')
+    return cell
   }
 
   handleHover = (e) => {
-    this.setState({ cellHovered: e.target.getAttribute('value') },
+    this.setState({ cellHovered: e.target.getAttribute('id') },
       () => this.cellHovered(this.state.cellHovered))
   }
 
@@ -77,14 +119,15 @@ export class Board extends Component {
         <tr key={row}>
           <th>{row}</th>
           {alphabetArr.map(letter => {
-              const value = `${letter}${row}`;
-              const placingShip = this.state.placingShip ? this.state.placingShip.includes(value) : false
+              const cell = `${letter}${row}`;
+              const placingShip = this.state.placingShip ? this.state.placingShip.includes(cell) : false
               return (
                 <Cell
+                  key={cell}
                   hovered={this.state.cellHovered}
                   placingShip={placingShip}
-                  key={value}
-                  value={value}
+                  cell={cell}
+                  ship={this.props.shipSelected.name}
                   handleClick={(e) => this.handleClick(e)}
                   handleHover={(e) => this.handleHover(e)}
                 />
