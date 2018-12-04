@@ -10,6 +10,24 @@ class App extends Component {
 
     this.state = {
       startGame: false,
+      boardData: {
+        'A': [0,0,0,0,0,0,0,0,0,0],
+        'B': [0,0,0,0,0,0,0,0,0,0],
+        'C': [0,0,0,0,0,0,0,0,0,0],
+        'D': [0,0,0,0,0,0,0,0,0,0],
+        'E': [0,0,0,0,0,0,0,0,0,0],
+        'F': [0,0,0,0,0,0,0,0,0,0],
+        'G': [0,0,0,0,0,0,0,0,0,0],
+        'H': [0,0,0,0,0,0,0,0,0,0],
+        'I': [0,0,0,0,0,0,0,0,0,0],
+        'J': [0,0,0,0,0,0,0,0,0,0]
+      },
+      cellData: {
+        0: '',
+        1: '#',
+        2: '%',
+        3: 'X'
+      },
       shipSelected: { 
         name: undefined
       },
@@ -17,11 +35,11 @@ class App extends Component {
       shipHorizontal: 'V',
       action: undefined,
       ships: {
-        carrier: { size: 5 },
-        battleship: { size: 4 },
-        cruiser: { size: 3 },
-        submarine:{ size: 3 },
-        destroyer: { size: 2 },
+        carrier: { size: 5, placement: {} },
+        battleship: { size: 4, placement: {} },
+        cruiser: { size: 3, placement: {} },
+        submarine:{ size: 3, placement: {} },
+        destroyer: { size: 2, placement: {} },
       }
     }
   }
@@ -30,17 +48,17 @@ class App extends Component {
   }
 
   componentWillMount() {
-    
     const getData = () => {
       const arr = Object.keys(this.state.ships)
-      this.setState({ placeShipsArray : arr })
+      this.setState({
+        placeShipsArray : arr
+      }, () => console.log(this.state.ships))
     }
     
     getData()
-    this.setState({ boardData: this.generateBoardData() }, () => console.log(this.state.boardData))
   }
 
-
+  // updates shipSelected obj in state  
   selectShip(e) {
     const ship = e.target.value
     const shipObj = ship ? this.state.ships[ship] : {}
@@ -67,8 +85,11 @@ class App extends Component {
   placeShip(shipObj) {
     const ships = Object.assign({}, this.state.ships)
     ships[this.state.shipSelected.name] = shipObj
-    this.setState({ ships }, () => console.log(this.state.ships, this.state.shipSelected.name))
+    const placement = ships[this.state.shipSelected.name].placement
+    this.setState({ ships }, () => this.updateBoardData())
   }
+
+  // creates an object map of the board 
   generateBoardData = () => {
     const rows = 10
     const columns = 10
@@ -81,8 +102,40 @@ class App extends Component {
       }, {})
   }
 
-  updateBoardData = (data) => {
-    const board = {}
+  // inputs an array of cell id's(i.e. [D1,D2,D3]) to return
+  // an object with each cell id's value (i.e. {D1: 0, D2: 0, D3: 0})
+  getCellArrayData = (cellArray) => {
+    return cellArray.reduce((obj, item) => {
+      const letter = item.split('')[0]
+      const number = item.split('')[1] - 1
+      const data = this.state.boardData[letter][number]
+      obj[item] = data
+      return obj
+    }, {})
+  }
+
+  updateBoardData = () => {
+    const board = Object.assign({}, this.state.boardData)
+    const shipSelected = this.state.shipSelected.name
+    const indexOfShip = this.state.placeShipsArray.indexOf(shipSelected)
+    const placeShipsArray = this.state.placeShipsArray
+    placeShipsArray.splice(indexOfShip, indexOfShip + 1 )
+    const ships = this.state.ships
+    Object.values(ships).forEach(ship => {
+      if (Object.keys(ship.placement).length > 0) {
+        Object.entries(ship.placement).forEach(cell => {
+          const l = cell[0].split('')[0]
+          const n = cell[0].split('')[1] - 1
+          board[l][n] = cell[1]
+        })
+      }
+    })
+    this.setState({
+      boardData:  board,
+      placeShipsArray: placeShipsArray,
+      shipSelected: { name: undefined },
+      action: placeShipsArray.length > 0 ? 'placeShip' : 'startTurn' 
+    }, () => console.log(board))
   }
 
   render() {
@@ -105,15 +158,19 @@ class App extends Component {
               </button>
             }
             <Board 
+              data={this.state.boardData}
               action={this.state.action}
               shipSelected={this.state.shipSelected}
-              placeShip={(obj) => this.placeShip(obj)}
+              placeShip={(e) => this.placeShip(e)}
+              getBoardData={(e) => this.getBoardData(e)}
+              getCellArrayData={(e) => this.getCellArrayData(e)}
+              updateBoardData={(arr, data) => this.updateBoardData(arr, data)}
             />
           </div>
           :
           <StartButton handleClick={() => this.initializeGame()} />
         }
-      </div>
+      </div>  
     );
   }
 }

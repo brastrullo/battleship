@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Cell from '../components/Cell'
+import Cell from '../components/Cell';
+import { setCellData } from '../utils';
 // import { connect } from 'react-redux';
 // import { action } from '../actions/index';
 
@@ -33,35 +34,18 @@ export class Board extends Component {
       cellClicked: cell,
       action: action
     }, () => console.log('clicked:', this.state.cellClicked))
-
-    this.updateCellState(cell)
   }
 
   placeShip = () => {
     const ship = Object.assign({}, this.props.shipSelected)
-    ship.placement = this.state.placingShip
-    this.props.placeShip(ship)
-  }
-
-  updateCellState = (x) => {
-    let cell;
-    let state = ''
-    switch(state) {
-      case 0:
-        cell = '*'
-        break;
-      case 1:
-        cell = '%'
-        break;
-      case 2:
-        cell = 'X'
-        break;
-      default:
-        cell = ''
-        break;
+    const cellData = this.props.getCellArrayData(this.state.placingShip)
+    const cellTaken = Object.values(cellData).includes(1)
+    if (!cellTaken) {
+      ship.placement = setCellData(this.state.placingShip, 1)
+      this.props.placeShip(ship)
+      return
     }
-    console.log('updated')
-    return cell
+    console.log('Spot taken. Place in other cells.')
   }
 
   handleHover = (e) => {
@@ -94,13 +78,14 @@ export class Board extends Component {
       if (horizontal) return horizontalArr
       if (vertical) return verticalArr
     }
+
     switch(this.props.action) {
       case 'selectShip':
         console.log('Please select ship.')
         break;
       case 'placeShip':
         console.log('Ship selected. Place ship.')
-        this.setState({ placingShip: selectHoveringCells(cell)})
+        this.setState({ placingShip: selectHoveringCells(cell)}, () => console.log(this.state.placingShip))
         break;
       default:
       return;
@@ -121,12 +106,14 @@ export class Board extends Component {
           {alphabetArr.map(letter => {
               const cell = `${letter}${row}`;
               const placingShip = this.state.placingShip ? this.state.placingShip.includes(cell) : false
+              const cellState = this.props.data[letter][row - 1]
               return (
                 <Cell
                   key={cell}
                   hovered={this.state.cellHovered}
                   placingShip={placingShip}
                   cell={cell}
+                  cellState={cellState}
                   ship={this.props.shipSelected.name}
                   handleClick={(e) => this.handleClick(e)}
                   handleHover={(e) => this.handleHover(e)}
