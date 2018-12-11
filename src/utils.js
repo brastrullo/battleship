@@ -26,3 +26,14 @@ export const cellData = {
   2: '%', //  ship hit
   3: 'X' // board miss
 }
+
+  // creates an object map of the board data
+export const generateBoardData = (rows = 10, columns = 10) => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+  const alphabetArray = alphabet.slice(0, rows)
+  const columnsArray = [...Array(columns).keys()].map(el => 0)
+  return alphabetArray.reduce((obj, item) => {
+      obj[item] = columnsArray
+      return obj
+    }, {})
+}

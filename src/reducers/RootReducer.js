@@ -124,8 +124,6 @@ const setActionReducer = (state = {}, action) => {
 }
 
 export default combineReducers({
-  mockBoardData: (state = {}) => state,
-  ships: (state = {}) => state,
   shipsObj: shipsObjReducer,
   shipsArray: selectShipsArrayReducer,
   placeShipArray: placeShipArrayReducer,

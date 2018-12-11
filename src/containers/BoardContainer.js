@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
-import CellContainer from './CellContainer';
 import Board from '../components/Board'
 import { alphabet, setCellData, getCellArrayData } from '../utils';
 import {
@@ -17,9 +15,7 @@ const BoardContainer = (props) => {
   const {
     action,
     boardData,
-    shipArray,
     placeShipArray,
-    setCellArray,
     shipsObj,
     selectedShip,
     cols,
@@ -28,12 +24,6 @@ const BoardContainer = (props) => {
 
   const size = selectedShip ? shipsObj[selectedShip].size : 0
   const orientation =  selectedShip ? shipsObj[selectedShip].orientation : 'H'
-
-  // const updatePlaceShip = () => {
-  //   const cellData = setCellData(placeShipArray, 1)
-  //   placeShip(selectedShip, cellData)
-
-  // }
 
   const selectHoveringCells = (cell) => {
     const horizontal = orientation === 'H'

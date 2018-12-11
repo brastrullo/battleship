@@ -1,21 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Cell from '../components/Cell'
+import { cellData } from '../utils';
 import {
   selectCell,
   hoverCell,
   unhoverCell,
   setCellArray,
-  placeShip,
-  updateSelectShipArray,
-  setAction,
-  emptyCellArray,
-  clearSelectedShip,
-  updateShipObj,
-  updateBoard
+  placeShip
 } from '../actions'
-import { alphabet, setCellData, getCellArrayData, cellData } from '../utils';
-import Cell from '../components/Cell'
 
 
 const CellContainer = (props) => {
@@ -124,12 +118,6 @@ Cell.propTypes = {
 }
 
 export default connect(
-  // updateShipObj,
-  // updateBoard,
-  // setAction,
-  // emptyCellArray,
-  // clearSelectedShip,
-  // updateSelectShipArray,
   mapDispatchToProps, {
     placeShip,
     selectCell,

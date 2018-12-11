@@ -11,8 +11,9 @@ const PlaceShipsSelect = (props) => {
   const { 
     setAction,
     selectedShip,
-    selectShip,
     shipsArray,
+    shipsObj,
+    selectShip,
     toggleOrientation
   } = props
   const selectShipArray = shipsArray.map(ship =>
@@ -23,23 +24,20 @@ const PlaceShipsSelect = (props) => {
   }
   return (
     <div>
+      <p>Ships left to place: </p>
+      <p>{shipsArray.join(', ').toString()}</p>
       <select onChange={(e) => onChangeHandler(e.target.value)}>
         <option value="">--Select Ship--</option>
         {selectShipArray}
       </select>
       { selectedShip && 
-        <button onClick={() => toggleOrientation(selectedShip)}>Turn Ship</button>
+        <span>
+          <button onClick={() => toggleOrientation(selectedShip)}>Toggle Orientation</button>
+          <span> { shipsObj[selectedShip].orientation }</span>
+        </span>
       }
     </div>
   )
-}
-
-PlaceShipsSelect.proptypes = {
-  setAction: PropTypes.func,
-  selectedShip: PropTypes.string,
-  selectShip: PropTypes.func,
-  shipsArray: PropTypes.array,
-  toggleOrientation: PropTypes.func
 }
 
 const mapDispatchToProps  = (state) => {
@@ -54,8 +52,17 @@ const mapDispatchToProps  = (state) => {
 
 export default connect(
   mapDispatchToProps, {
+    setAction,
     selectShip,
-    toggleOrientation,
-    setAction
+    toggleOrientation
   }
-)(PlaceShipsSelect);
+)(PlaceShipsSelect)
+
+PlaceShipsSelect.proptypes = {
+  setAction: PropTypes.func,
+  selectedShip: PropTypes.string,
+  shipsArray: PropTypes.array,
+  shipsObj: PropTypes.object,
+  selectShip: PropTypes.func,
+  toggleOrientation: PropTypes.func
+}
