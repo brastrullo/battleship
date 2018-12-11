@@ -1,33 +1,39 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default (props) => {
-  const { cell, placingShip, ship, cellState } = props
-  const className = placingShip ? `${ship}` : ''
-  const showValue = (cellState) => {
-    let cell
-    switch(cellState) {
-      case 0:
-        cell = '.'
-        break;
-      case 1:
-        cell = '#'
-        break;
-      case 2:
-        cell = 'X'
-        break;
-      default:
-        break;
-    }
-    return cell;
-  }
+const Cell = (props) => {
+  const {
+    cell,
+    className,
+    cellMarker,
+    clickHandler,
+    hoverHandler,
+    leaveHandler
+  } = props
+
+  const handleClick = (e) => clickHandler(e.target.id)
+  const handleHover = (e) => hoverHandler(e.target.id)
+
   return (
     <td
       className={className}
       id={cell}
-      onClick={(e) => props.handleClick(e)}
-      onMouseEnter={(e) => props.handleHover(e)}
+      onClick={handleClick}
+      onMouseEnter={handleHover}
+      onMouseLeave={leaveHandler}
     >
-      { showValue(cellState) }
+      { cellMarker }
     </td>
   )
 }
+
+Cell.propTypes = {
+  cell: PropTypes.string,
+  className: PropTypes.string,
+  cellMarker: PropTypes.string,
+  clickHandler: PropTypes.func,
+  hoverHandler: PropTypes.func,
+  leavehandler: PropTypes.func
+}
+
+export default Cell

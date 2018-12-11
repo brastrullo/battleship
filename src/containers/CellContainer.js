@@ -15,10 +15,10 @@ import {
   updateBoard
 } from '../actions'
 import { alphabet, setCellData, getCellArrayData, cellData } from '../utils';
-import CellComponent from '../components/CellComponent'
+import Cell from '../components/Cell'
 
 
-const Cell = (props) => {
+const CellContainer = (props) => {
   const {
     action,
     cell,
@@ -31,6 +31,7 @@ const Cell = (props) => {
     setCellArray,
     placeShip,
     selectedShip,
+    placeSelectedShip,
     selectHoveringCells,
     placeShipArray,
     shipsObj
@@ -77,47 +78,8 @@ const Cell = (props) => {
     }
   }
 
-  const updateBoardData = () => {
-    const board = Object.assign({}, boardData)
-    console.log(board)
-    const indexOfShip = placeShipArray.indexOf(selectedShip)
-    placeShipArray.splice(indexOfShip, indexOfShip + 1 )
-    Object.values(shipsObj).forEach(ship => {
-      if (Object.keys(ship.placement).length > 0) {
-        Object.entries(ship.placement).forEach(cell => {
-          const l = cell[0].split('')[0]
-          const n = cell[0].split('')[1] - 1
-          board[l][n] = cell[1]
-        })
-      }
-    })
-    const action = placeShipArray.length > 0 ? 'placeShip' : 'startTurn' 
-    console.log('board', board)
-    updateBoard(board)
-    emptyCellArray()
-    clearSelectedShip()
-    setAction(action)
-  }
-
-  const placeSelectedShip = () => {
-    const cellData = getCellArrayData(boardData, placeShipArray)
-    const cellTaken = Object.values(cellData).includes(1)
-    if (!cellTaken) {
-      const dataObj = setCellData(placeShipArray, 1)
-      placeShip(selectedShip, dataObj)
-      clearSelectedShip()
-      emptyCellArray()
-      updateBoardData()
-      setAction('selectShip')
-      console.log(`Placed: ${selectedShip}`)
-      return
-    }
-    console.log('Spot taken. Place in other cells.')
-  }
-
-
   return (
-    <CellComponent
+    <Cell
       className={className}
       cell={cell}
       cellMarker={cellMarker}
@@ -175,4 +137,4 @@ export default connect(
     unhoverCell,
     setCellArray
   }
-)(Cell);
+)(CellContainer);

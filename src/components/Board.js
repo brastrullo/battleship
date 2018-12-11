@@ -9,6 +9,7 @@ const Board = (props) => {
     boardData,
     selectedShip,
     placeShipArray,
+    placeSelectedShip,
     selectHoveringCells,
     cols,
     rows
@@ -33,6 +34,7 @@ const Board = (props) => {
               <CellContainer
                 selectHoveringCells={selectHoveringCells}
                 className={className}
+                placeSelectedShip={placeSelectedShip}
                 key={cell}
                 cell={cell}
                 cellState={cellState}

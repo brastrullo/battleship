@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
 import CellContainer from './CellContainer';
-import BoardComponent from '../components/BoardComponent'
-import { alphabet, setCellData } from '../utils';
+import Board from '../components/Board'
+import { alphabet, setCellData, getCellArrayData } from '../utils';
 import {
   setCellArray,
   emptyCellArray,
   updateBoard,
   clearSelectedShip,
-  setAction
+  setAction,
+  placeShip
 } from '../actions'
 
-const Board = (props) => {
+const BoardContainer = (props) => {
   const {
     action,
     boardData,
@@ -58,14 +59,51 @@ const Board = (props) => {
     if (vertical) return verticalArr
   }
 
+  const updateBoardData = () => {
+    const board = Object.assign({}, boardData)
+    const indexOfShip = placeShipArray.indexOf(selectedShip)
+    placeShipArray.splice(indexOfShip, indexOfShip + 1 )
+    Object.values(shipsObj).forEach(ship => {
+      if (Object.keys(ship.placement).length > 0) {
+        Object.entries(ship.placement).forEach(cell => {
+          const l = cell[0].split('')[0]
+          const n = cell[0].split('')[1] - 1
+          board[l][n] = cell[1]
+        })
+      }
+    })
+    const action = placeShipArray.length > 0 ? 'placeShip' : 'startTurn' 
+    updateBoard(board)
+    emptyCellArray()
+    clearSelectedShip()
+    setAction(action)
+  }
+
+  const placeSelectedShip = () => {
+    const cellData = getCellArrayData(boardData, placeShipArray)
+    const cellTaken = Object.values(cellData).includes(1)
+    if (!cellTaken) {
+      const dataObj = setCellData(placeShipArray, 1)
+      placeShip(selectedShip, dataObj)
+      clearSelectedShip()
+      emptyCellArray()
+      updateBoardData()
+      setAction('selectShip')
+      console.log(`Placed: ${selectedShip}`)
+      return
+    }
+    console.log('Spot taken. Place in other cells.')
+  }
+
   return (
-    <BoardComponent
+    <Board
       boardData={boardData}
       selectHoveringCells= {selectHoveringCells}
       rows={rows}
       cols={cols}
       action={action}
       placeShipArray= {placeShipArray}
+      placeSelectedShip={placeSelectedShip}
       selectedShip={selectedShip}
       onMouseLeave={() => console.log('asdf')}
     />
@@ -82,6 +120,7 @@ const mapDispatchToProps  = (state) => {
     shipsObj: state.shipsObj,
     placeShipArray: state.placeShipArray,
     selectedShip: state.selectedShip,
+    placeShip: state.placeShip,
     shipsArray: state.shipArray,
   }
 }
@@ -89,6 +128,7 @@ const mapDispatchToProps  = (state) => {
 export default connect(
   mapDispatchToProps, {
     setCellArray,
-    emptyCellArray
+    emptyCellArray,
+    placeShip
   }
-)(Board);
+)(BoardContainer);
