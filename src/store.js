@@ -3,41 +3,38 @@ import thunk from 'redux-thunk';
 import rootReducer  from './reducers/RootReducer';
 
 const initialState = {
-  board: {
-    cols: 10,
-    rows: 10,
-    data: {
-      'A': [1,1,0,0,0,0,0,0,0,0],
-      'B': [1,0,0,0,0,0,0,0,0,0],
-      'C': [0,0,0,0,0,0,0,0,0,0],
-      'D': [0,0,0,0,0,0,0,0,0,0],
-      'E': [0,0,0,0,0,0,0,0,0,0],
-      'F': [0,0,0,0,0,0,0,0,0,0],
-      'G': [0,0,0,0,0,0,0,0,0,0],
-      'H': [0,0,0,0,0,0,0,0,0,0],
-      'I': [0,0,0,0,0,0,0,0,0,0],
-      'J': [0,0,0,0,0,0,0,0,0,0]
-    }
+  boardData: {
+    'A': [1,1,0,0,0,0,0,0,0,0],
+    'B': [1,0,0,0,0,0,0,0,0,0],
+    'C': [0,0,0,0,0,0,0,0,0,0],
+    'D': [0,0,0,0,0,0,0,0,0,0],
+    'E': [0,0,0,0,0,0,0,0,0,0],
+    'F': [0,0,0,0,0,0,0,0,0,0],
+    'G': [0,0,0,0,0,0,0,0,0,0],
+    'H': [0,0,0,0,0,0,0,0,0,0],
+    'I': [0,0,0,0,0,0,0,0,0,0],
+    'J': [0,0,0,0,0,0,0,0,0,0]
   },
+  boardCols: 10,
+  boardRows: 10,
+  shipSelected: null,
   shipsArray: [
-    'carrier',
     'battleship',
+    'carrier',
     'cruiser',
-    'submarine',
-    'destroyer'
+    'destroyer',
+    'submarine'
   ],
-  shipsObj: {
-    carrier: { size: 5, placement: {}, orientation: 'H' },
-    battleship: { size: 4, placement: {}, orientation: 'H' },
-    cruiser: { size: 3, placement: {}, orientation: 'H' },
-    submarine:{ size: 3, placement: {}, orientation: 'H' },
-    destroyer: { size: 2, placement: {}, orientation: 'H' },
+  shipCellData: {
+    battleship: {},
+    carrier: {},
+    cruiser: {},
+    destroyer: {},
+    submarine: {}
   },
-  selectedShip: null,
-  cellSelected: null,
-  cellHovered: null,
-  placeShipArray : [],
-  action: 'setBoardSize',
+  cellArray : [],
+  orientation: 'H',
+  gameInitialized: false
 }
 
 const logger = store => next => action => {

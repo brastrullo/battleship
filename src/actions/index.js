@@ -1,36 +1,20 @@
-import * as type from './constants'
+import * as type from './actionTypes'
 
 export const selectShip = (selected) => ({
   type: type.SELECT_SHIP,
   payload: selected
 })
 
-export const updateShipObj = (ship, obj) => ({
-  type: type.UPDATE_SHIP_OBJECT,
-  payload: {
-    ship,
-    obj
-  }
-})
-
-export const toggleOrientation = (ship) => ({
+export const toggleOrientation = (orientation) => ({
   type: type.TOGGLE_ORIENTATION,
-  payload: { ship }
+  payload: orientation === 'H' ? 'V' : 'H'
 })
 
-export const placeShip = (ship, placement) => ({
-  type: type.PLACE_SHIP,
+export const updateShipPlacement = (ship, placement) => ({
+  type: type.UPDATE_SHIP_PLACEMENT,
   payload: {
     ship,
     placement
-  }
-})
-
-export const getShipSize = (ship, size) => ({
-  type: type.GET_SHIP_SIZE,
-  payload: {
-    ship,
-    size
   }
 })
 
@@ -59,25 +43,42 @@ export const setBoardRows = (rows) => ({
   payload: rows
 })
 
-export const initializeGame = (gameStarted = true) => ({
+export const initializeGame = (gameStarted = true) => ({  
   type: type.INITIALIZE_GAME,
   payload: gameStarted
 })
 
-export const getBoardData = (payload) => ({
-  type: type.GET_BOARD_DATA,
-  payload
-})
+// export const getShipData = (obj) => ({
+//   type: type.GET_SHIP_DATA,
+//   payload: {
+//     selected: obj.selected,
+//     orientation: obj.orientation,
+//     size: obj.size
+//   }
+// })
 
-export const setLetterHeadings = (rows) => ({
-  type: type.SET_LETTER_HEADINGS,
-  payload: rows
-})
 
-export const setNumberHeadings = (columns) => ({
-  type: type.SET_NUMBER_HEADINGS,
-  payload: columns
-})
+// // // an example of using redux-thunk
+
+// // export const fetchTodos = (filter) => (dispatch) => {
+// //   dispatch(requestTodos(filter));
+
+// //   return api.fetchTodos(filter).then(response => {
+// //     dispatch(receiveTodos(filter, response));
+// //   });
+// // }
+
+// export const hoverShipCells = (cell, shipDataObj) => (dispatch) => {
+//   return getShipData(shipDataObj).then(
+//           () => dispatch(hoverCell(cell)),
+//           obj => dispatch()
+//         )
+// }
+
+// export const getBoardData = (payload) => ({
+//   type: type.GET_BOARD_DATA,
+//   payload
+// })
 
 export const selectCell = (cell) => ({
   type: type.SELECT_CELL,
@@ -94,22 +95,17 @@ export const unhoverCell = () => ({
   payload: null
 })
 
-export const createBoard = (data) => ({
-  type: type.CREATE_BOARD,
-  data
-})
-
 export const updateBoard = (data) => ({
   type: type.UPDATE_BOARD,
   payload: data
 })
 
-export const setAction = (data) => ({
-  type: type.SET_ACTION,
-  data
-})
-
-export const updateSelectShipArray = (ship) => ({
-  type: type.UPDATE_SELECT_SHIP_ARRAY,
+export const removeShipFromArray = (ship) => ({
+  type: type.REMOVE_SHIP_FROM_ARRAY,
   payload: ship
 })
+
+// export const createBoard = (data) => ({
+//   type: type.CREATE_BOARD,
+//   data
+// })

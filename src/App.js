@@ -1,33 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import BoardContainer from './containers/BoardContainer';
 import PlaceShipsSelectContainer from './containers/PlaceShipsSelectContainer';
-import './App.css';
 import BoardSizeSelectContainer from './containers/BoardSizeSelectContainer';
+import './App.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-          {
-            this.props.startGame ? 
-              <div>
-                <PlaceShipsSelectContainer />
-                <BoardContainer />
-              </div>
-            : 
+const App = (props) => {
+  const {
+    startGame
+  } = props
+  return (
+    <div className="App">
+        {
+          startGame ?
             <div>
-              <div>Battleship</div>
-              <BoardSizeSelectContainer />
+              <PlaceShipsSelectContainer />
+              <BoardContainer />
             </div>
-          }
-      </div>  
-    );
-  }
+          : 
+          <div>
+            <div>Battleship</div>
+            <BoardSizeSelectContainer />
+          </div>
+        }
+    </div>
+  )
 }
 
 const mapStateToProps = state => ({
-  startGame: state.initializeGame
+  startGame: state.gameInitialized
 })
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, {
+
+})(App);

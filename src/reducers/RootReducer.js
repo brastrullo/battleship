@@ -1,27 +1,10 @@
 import { combineReducers } from 'redux';
-import * as type from '../actions/constants'
+import * as type from '../actions/actionTypes'
 
-const boardReducer = (state, action) => {
+const boardDataReducer = (state = {}, action) => {
   switch(action.type) {
     case type.GET_BOARD_DATA:
-      return { ...state, data: action.payload }
-    case type.SET_BOARD_COL:
-      return { ...state, cols: action.payload }
-    case type.SET_BOARD_ROW:
-      return { ...state, rows: action.payload }
-    case type.UPDATE_BOARD:
-      return { ...state, data: action.payload }
-    default:
-      return {...state}
-  }
-}
-
-const placeShipArrayReducer = (state = [], action) => {
-  switch(action.type) {
-    case type.SET_CELL_ARRAY:
       return action.payload
-    case type.EMPTY_CELL_ARRAY:
-    return action.payload
     default:
       return state
   }
@@ -45,54 +28,74 @@ const boardRowsReducer = (rows = 10, action) => {
   }
 }
 
-const initializeGameReducer = (gameStarted = false, action) => {
-  switch(action.type) {
-    case type.INITIALIZE_GAME:
-      return action.payload
-    default:
-      return gameStarted
-  }
-}
-
-const selectedShipReducer = (state = null, action) => {
+const shipSelectedReducer = (state = null, action) => {
   switch(action.type) {
     case type.SELECT_SHIP:
       return action.payload
     case type.CLEAR_SELECTED_SHIP:
-      return undefined
+      return action.payload
     default:
       return state
   }
 }
 
-const shipsObjReducer = (state, action) => {
-  const ship = action.payload ? action.payload.ship : ''
-  const obj = action.payload ? action.payload.obj : ''
+const shipsArrayReducer = (state = {}, action) => {
   switch(action.type) {
-    case type.UPDATE_SHIP_OBJECT:
-      return { ...state, [ship]: obj }
-    case type.PLACE_SHIP:
+    case type.REMOVE_SHIP_FROM_ARRAY:
+      return state.filter(ship => ship !== action.payload)
+    default:
+      return state
+  }
+}
+
+const shipCellDataReducer = (state, action) => {
+  const ship = action.payload ? action.payload.ship : ''
+  switch(action.type) {
+    case type.UPDATE_SHIP_PLACEMENT:
       return { ...state,
-        [ship] : { ...state[ship], placement: action.payload.placement } }
-    case type.TOGGLE_ORIENTATION:
-    const orientation = state[ship].orientation
-      return { ...state,
-        [ship]: { ...state[ship], orientation: orientation === 'H' ? 'V' : 'H' } }
+        [ship] : action.payload.placement}
     default:
       return {...state}
   }
 }
 
-const selectShipsArrayReducer = (state = {}, action) => {
+const cellArrayReducer = (state = [], action) => {
   switch(action.type) {
-    case type.UPDATE_SELECT_SHIP_ARRAY:
-      const i = state.indexOf(action.payload)
-      state.splice(i, 1)
-      return state
+    case type.SET_CELL_ARRAY:
+      return action.payload
+    case type.EMPTY_CELL_ARRAY:
+    return action.payload
     default:
       return state
   }
 }
+
+const orientationReducer = (state = 'H', action) => {
+  switch(action.type) {
+    case type.TOGGLE_ORIENTATION:
+      return action.payload
+    default:
+      return state
+  }
+}
+
+// const shipsObjReducer = (state, action) => {
+//   const ship = action.payload ? action.payload.ship : ''
+//   const obj = action.payload ? action.payload.obj : ''
+//   switch(action.type) {
+//     case type.UPDATE_SHIP_OBJECT:
+//       return { ...state, [ship]: obj }
+//     case type.PLACE_SHIP:
+//       return { ...state,
+//         [ship] : { ...state[ship], placement: action.payload.placement } }
+//     case type.TOGGLE_ORIENTATION:
+//     const orientation = state[ship].orientation
+//       return { ...state,
+//         [ship]: { ...state[ship], orientation: orientation === 'H' ? 'V' : 'H' } }
+//     default:
+//       return {...state}
+//   }
+// }
 
 const cellSelectedReducer = (cell = null, action) => {
   switch(action.type) {
@@ -114,25 +117,25 @@ const cellHoveredReducer = (cell = null, action) => {
   }
 }
 
-const setActionReducer = (state = {}, action) => {
-	switch (action.type) {
-		case type.SET_ACTION:
-		return action.data
-		default:
-		return state
-	}
+const gameInitializedReducer = (gameStarted = false, action) => {
+  switch(action.type) {
+    case type.INITIALIZE_GAME:
+      return action.payload
+    default:
+      return gameStarted
+  }
 }
 
 export default combineReducers({
-  shipsObj: shipsObjReducer,
-  shipsArray: selectShipsArrayReducer,
-  placeShipArray: placeShipArrayReducer,
-  board: boardReducer,
-  action: setActionReducer,
+  boardData: boardDataReducer,
+  boardCols: boardColsReducer,
+  boardRows: boardRowsReducer,
+  shipSelected: shipSelectedReducer,
+  shipsArray: shipsArrayReducer,
+  shipCellData: shipCellDataReducer,
+  cellArray: cellArrayReducer,
+  orientation: orientationReducer,
   cellSelected: cellSelectedReducer,
   cellHovered: cellHoveredReducer,
-  columns: boardColsReducer,
-  rows: boardRowsReducer,
-  selectedShip: selectedShipReducer,
-  initializeGame: initializeGameReducer
+  gameInitialized: gameInitializedReducer
 })

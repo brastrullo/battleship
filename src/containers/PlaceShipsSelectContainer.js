@@ -2,38 +2,41 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 import {
-  setAction,
   selectShip,
   toggleOrientation
 } from '../actions'
 
 const PlaceShipsSelect = (props) => {
   const { 
-    setAction,
-    selectedShip,
+    shipSelected,
     shipsArray,
-    shipsObj,
     selectShip,
-    toggleOrientation
+    toggleOrientation,
+    orientation
   } = props
   const selectShipArray = shipsArray.map(ship =>
     <option key={ship} value={ship}>{ship}</option>)
   const onChangeHandler = (e) => {
     selectShip(e)
-    setAction('placeShip')
   }
   return (
     <div>
-      <p>Ships left to place: </p>
-      <p>{shipsArray.join(', ').toString()}</p>
-      <select onChange={(e) => onChangeHandler(e.target.value)}>
-        <option value="">--Select Ship--</option>
-        {selectShipArray}
-      </select>
-      { selectedShip && 
+      { shipsArray.length > 0 ?
+        <div>
+          <p>Ships left to place: </p>
+          <p>{shipsArray.join(', ').toString()}</p>
+          <select onChange={(e) => onChangeHandler(e.target.value)}>
+            <option value="">--Select Ship--</option>
+            {selectShipArray}
+          </select>
+        </div>
+        :
+        <div>Enemy Turn</div>
+      }
+      { shipSelected && 
         <span>
-          <button onClick={() => toggleOrientation(selectedShip)}>Toggle Orientation</button>
-          <span> { shipsObj[selectedShip].orientation }</span>
+          <button onClick={() => toggleOrientation(orientation)}>Toggle Orientation</button>
+          <span> { orientation }</span>
         </span>
       }
     </div>
@@ -42,17 +45,15 @@ const PlaceShipsSelect = (props) => {
 
 const mapDispatchToProps  = (state) => {
   return {
-    action: state.action,
-    shipsObj: state.shipsObj,
-    selectedShip: state.selectedShip,
+    shipSelected: state.shipSelected,
     shipsArray: state.shipsArray,
+    orientation: state.orientation,
     toggleOrientation: state.toggleOrientation
   }
 }
 
 export default connect(
   mapDispatchToProps, {
-    setAction,
     selectShip,
     toggleOrientation
   }
@@ -60,7 +61,7 @@ export default connect(
 
 PlaceShipsSelect.proptypes = {
   setAction: PropTypes.func,
-  selectedShip: PropTypes.string,
+  shipSelected: PropTypes.string,
   shipsArray: PropTypes.array,
   shipsObj: PropTypes.object,
   selectShip: PropTypes.func,
