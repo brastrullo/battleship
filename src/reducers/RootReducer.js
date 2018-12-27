@@ -1,6 +1,15 @@
 import { combineReducers } from 'redux';
 import * as type from '../actions/actionTypes'
 
+const enemyBoardReducer = (state = {}, action) => {
+  switch(action.type) {
+    case type.SET_ENEMY_BOARD:
+      return action.payload
+    default:
+      return state
+  }
+}
+
 const boardDataReducer = (state = {}, action) => {
   switch(action.type) {
     case type.GET_BOARD_DATA:
@@ -28,6 +37,15 @@ const boardRowsReducer = (rows = 10, action) => {
   }
 }
 
+const randomizeReducer = (state = false, action) => {
+  switch(action.type) {
+    case type.TOGGLE_RANDOMIZE:
+      return state ? false : true
+    default:
+      return state
+  }
+}
+
 const shipSelectedReducer = (state = null, action) => {
   switch(action.type) {
     case type.SELECT_SHIP:
@@ -52,9 +70,9 @@ const shipCellDataReducer = (state, action) => {
   const ship = action.payload ? action.payload.ship : ''
   switch(action.type) {
     case type.UPDATE_SHIP_PLACEMENT:
-      return { ...state,
-        [ship] : action.payload.placement}
-    default:
+    return { ...state,
+      [ship] : action.payload.placement}
+      default:
       return {...state}
   }
 }
@@ -127,9 +145,11 @@ const gameInitializedReducer = (gameStarted = false, action) => {
 }
 
 export default combineReducers({
+  enemyBoard: enemyBoardReducer,
   boardData: boardDataReducer,
   boardCols: boardColsReducer,
   boardRows: boardRowsReducer,
+  randomize: randomizeReducer,
   shipSelected: shipSelectedReducer,
   shipsArray: shipsArrayReducer,
   shipCellData: shipCellDataReducer,

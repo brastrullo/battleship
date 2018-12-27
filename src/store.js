@@ -4,8 +4,20 @@ import rootReducer  from './reducers/RootReducer';
 
 const initialState = {
   boardData: {
-    'A': [1,1,0,0,0,0,0,0,0,0],
+    'A': [0,1,0,0,0,0,0,0,0,0],
     'B': [1,0,0,0,0,0,0,0,0,0],
+    'C': [0,0,0,0,0,0,0,0,0,0],
+    'D': [0,0,0,0,0,0,0,0,0,0],
+    'E': [0,0,0,0,0,0,0,0,0,0],
+    'F': [0,0,0,0,0,0,0,0,0,0],
+    'G': [0,0,0,0,0,0,0,0,0,0],
+    'H': [0,0,0,0,0,0,0,0,0,0],
+    'I': [0,0,0,0,0,0,0,0,0,0],
+    'J': [0,0,0,0,0,0,0,0,0,0]
+  },
+  enemyBoard: {
+    'A': [0,0,0,0,0,0,0,0,0,0],
+    'B': [0,0,0,0,0,0,0,0,0,0],
     'C': [0,0,0,0,0,0,0,0,0,0],
     'D': [0,0,0,0,0,0,0,0,0,0],
     'E': [0,0,0,0,0,0,0,0,0,0],
@@ -25,6 +37,7 @@ const initialState = {
     'destroyer',
     'submarine'
   ],
+  randomize: false,
   shipCellData: {
     battleship: {},
     carrier: {},
@@ -32,6 +45,7 @@ const initialState = {
     destroyer: {},
     submarine: {}
   },
+  cellHovered: null,
   cellArray : [],
   orientation: 'H',
   gameInitialized: false

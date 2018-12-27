@@ -1,20 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setAction, setBoardCols, setBoardRows, initializeGame } from '../actions'
+import { shipSize } from '../constants'
+import { randomCell, randomPlacement } from '../utils'
+import {
+  setBoardCols,
+  setBoardRows,
+  initializeGame,
+  setEnemyBoard
+} from '../actions'
 
 const BoardSizeSelect = (props) => {
   const { 
     setBoardCols,
     setBoardRows,
     initializeGame,
-    setAction
+    setEnemyBoard,
+    enemyBoard
   } = props
   const mapSelect = [...Array(6).keys()].map(el => <option key={`col${el}`} value={el + 5}>{el + 5}</option>)
 
+  const generateEnemyBoard = (board) => {
+    const newBoard = Object.assign({}, board)
+    setEnemyBoard(newBoard)
+  }
+
   const startGame = () => {
     initializeGame()
-    setAction('selectShip')
+    generateEnemyBoard(enemyBoard)
   }
+  
   return (
     <div>
       <select onChange={(e) => setBoardCols(Number(e.target.value))}>
@@ -32,9 +46,10 @@ const BoardSizeSelect = (props) => {
 
 const mapDispatchToProps  = (state) => {
   return {
-    cols: state.board.cols,
-    rows: state.board.cols,
-    initializeGame: state.initializeGame
+    cols: state.boardCols,
+    rows: state.boardRows,
+    initializeGame: state.initializeGame,
+    enemyBoard: state.enemyBoard
   }
 }
 
@@ -43,6 +58,6 @@ export default connect(
     initializeGame,
     setBoardCols,
     setBoardRows,
-    setAction
+    setEnemyBoard
   }
 )(BoardSizeSelect);

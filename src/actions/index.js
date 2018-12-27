@@ -33,6 +33,11 @@ export const clearSelectedShip = () => ({
   payload: null
 })
 
+export const setEnemyBoard = (boardData) => ({
+  type: type.SET_ENEMY_BOARD,
+  payload: boardData
+})
+
 export const setBoardCols = (columns) => ({
   type: type.SET_BOARD_COL,
   payload: columns
@@ -83,6 +88,11 @@ export const initializeGame = (gameStarted = true) => ({
 export const selectCell = (cell) => ({
   type: type.SELECT_CELL,
   payload: cell
+})
+
+export const toggleRandomize = () => ({
+  type: type.TOGGLE_RANDOMIZE,
+  payload: null
 })
 
 export const hoverCell = (cell) => ({
