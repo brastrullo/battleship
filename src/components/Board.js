@@ -1,18 +1,14 @@
 import React from 'react';
 import CellContainer from '../containers/CellContainer';
-import { alphabet } from '../utils';
 
 const Board = (props) => {
   const {
     placeShipOnBoard,
     boardData,
-    cols,
-    rows,
     shipData
   } = props
-
-  const boardRows = [...Array(rows).keys()].map(el => 0)
-  const alphabetArr = alphabet.slice(0, cols)
+  const boardRows = boardData[Object.keys(boardData)[0]].map(el => 0)
+  const alphabetArr = Object.keys(boardData)
   const header = [].concat('', alphabetArr)
   const columns = header.map(cell => <th key={cell}>{cell}</th>)
   const grid = boardRows.map((letter, i) => {

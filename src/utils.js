@@ -50,6 +50,7 @@ export const cellTaken = (boardData, placeShipArray) => {
   }, {})
   return Object.values(cellData).includes(1)
 }
+
 export const getCellArrayData = (boardData, placeShipArray) => {
   return placeShipArray.reduce((obj, item) => {
     const letter = item.split('')[0]

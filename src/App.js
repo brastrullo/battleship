@@ -19,7 +19,6 @@ const App = (props) => {
 
   return (
     <div className="App">
-      
         {
           startGame ?
             <div>

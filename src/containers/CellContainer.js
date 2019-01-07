@@ -31,7 +31,7 @@ const CellContainer = (props) => {
 
   const placingShip = cellArray ? cellArray.includes(cell) : false
   const className =  placingShip ? `${shipSelected}` : ''
-  const cellMarker = cellData[cellState]
+  const cellSymbol = cellData[cellState]
 
   const selectHoveringCells = (e, shipData) => {
     const board = { rows, cols }
@@ -59,7 +59,7 @@ const CellContainer = (props) => {
     }
   }
 
-  const handleHover = (e) => {
+  const handleHover = (id) => {
     const action =
       shipSelected ?
         (randomize ? 'randomize' : 'placeShip')
@@ -69,7 +69,7 @@ const CellContainer = (props) => {
         console.log('Please select ship.')
         break
       case 'placeShip':
-        selectHoveringCells(e, shipData)
+        selectHoveringCells(id, shipData)
         console.log('Ship selected. Click on cell to place ship.')
         break
       default:
@@ -78,15 +78,14 @@ const CellContainer = (props) => {
   }
 
   const leaveHandler = () => shipSelected ? console.log('setupLeaveHandler') : ''
-
   return (
     <Cell
       cell={cell}
       className={randomize ? '' : className}
-      cellMarker={cellMarker}
-      clickHandler={handleClick}
-      hoverHandler={handleHover}
-      leaveHandler={leaveHandler}
+      cellSymbol={cellSymbol}
+      onClick={handleClick}
+      onHover={handleHover}
+      onLeave={leaveHandler}
     />
   )
 }

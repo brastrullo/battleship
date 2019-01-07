@@ -15,8 +15,6 @@ import {
 const BoardContainer = (props) => {
   const {
     boardData,
-    cols,
-    rows,
     orientation,
     cellArray,
     shipSelected,
@@ -25,14 +23,13 @@ const BoardContainer = (props) => {
     clearSelectedShip,
     emptyCellArray,
     updateBoard,
+    placeShipHandler,
   } = props
 
   const shipData = {
     orientation,
     size: shipSize[shipSelected]
   }
-
-  const childFunc = () => console.log('called childFunc!')
 
   const placeShipOnBoard = () => {
     if (cellArray.length === 0) {
@@ -51,6 +48,7 @@ const BoardContainer = (props) => {
     emptyCellArray()
 
     const board = Object.assign({}, boardData)
+    
     Object.entries(cellData).forEach(cell => {
       const l = cell[0].split('')[0]
       const n = cell[0].split('')[1] - 1
@@ -63,8 +61,6 @@ const BoardContainer = (props) => {
     <Board
       boardData={boardData}
       shipData={shipData}
-      rows={rows}
-      cols={cols}
       placeShipOnBoard={placeShipOnBoard}
     />
   )
@@ -73,8 +69,6 @@ const BoardContainer = (props) => {
 const mapDispatchToProps  = (state) => {
   return {
     boardData: state.boardData,
-    cols: state.boardCols,
-    rows: state.boardRows,
     orientation: state.orientation,
     shipSelected: state.shipSelected,
     shipsArray: state.shipArray,

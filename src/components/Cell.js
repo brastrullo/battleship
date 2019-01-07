@@ -5,7 +5,7 @@ const Cell = (props) => {
   const {
     cell,
     className,
-    cellMarker,
+    cellSymbol,
     clickHandler,
     hoverHandler,
     leaveHandler
@@ -22,7 +22,7 @@ const Cell = (props) => {
       onMouseEnter={handleHover}
       onMouseLeave={leaveHandler}
     >
-      { cellMarker }
+      { cellSymbol }
     </td>
   )
 }
