@@ -24,6 +24,10 @@ const BoardSizeSelect = (props) => {
     setEnemyBoard(newBoard)
   }
 
+  const randomizeEnemyBoard = () => {
+    console.log('randomizeEnemyBoard')
+  }
+
   const startGame = () => {
     initializeGame()
     generateEnemyBoard(enemyBoard)

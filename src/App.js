@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import BoardContainer from './containers/BoardContainer';
-import PlaceShipsSelectContainer from './containers/PlaceShipsSelectContainer';
 import BoardSizeSelectContainer from './containers/BoardSizeSelectContainer';
 import { setEnemyBoard } from './actions'
 import './App.css';
@@ -9,22 +8,19 @@ import './App.css';
 // TODO:
 // - COMPLETE: randomize place ship
 // - FIX: ship hover at non-default board size
+// - FIX: all ship random placement still has overlap
+// - FEAT: add history/undo/redo actions
 
 const App = (props) => {
   const {
     startGame
   } = props
 
-  const placeShipHandler = () => console.log('placed!')
-
   return (
     <div className="App">
         {
           startGame ?
-            <div>
-              <PlaceShipsSelectContainer placeShipHandler={placeShipHandler} />
-              <BoardContainer />
-            </div>
+            <BoardContainer />
           : 
           <div>
             <div>Battleship</div>

@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
+import undoable, { distinctState } from 'redux-undo'
 import * as type from '../actions/actionTypes'
+import { alphabet, allShipsArray, newBoardData } from '../constants'
 
-const enemyBoardReducer = (state = {}, action) => {
+const enemyBoardReducer = (state = newBoardData, action) => {
   switch(action.type) {
     case type.SET_ENEMY_BOARD:
       return action.payload
@@ -10,9 +12,11 @@ const enemyBoardReducer = (state = {}, action) => {
   }
 }
 
-const boardDataReducer = (state = {}, action) => {
+const boardDataReducer = (state = newBoardData, action) => {
   switch(action.type) {
     case type.GET_BOARD_DATA:
+      return action.payload
+    case type.UPDATE_BOARD:
       return action.payload
     default:
       return state
@@ -61,6 +65,10 @@ const shipsArrayReducer = (state = {}, action) => {
   switch(action.type) {
     case type.REMOVE_SHIP_FROM_ARRAY:
       return state.filter(ship => ship !== action.payload)
+    case type.RESTORE_SHIP_TO_ARRAY:
+      return [...state, action.payload]
+    case type.RESTORE_ALL_SHIPS:
+      return allShipsArray
     default:
       return state
   }
@@ -144,9 +152,15 @@ const gameInitializedReducer = (gameStarted = false, action) => {
   }
 }
 
+
+const undoableBoardData = undoable(boardDataReducer, {
+  filter: distinctState()
+})
+
+// boardDataNew: undoableBoardData,
 export default combineReducers({
   enemyBoard: enemyBoardReducer,
-  boardData: boardDataReducer,
+  boardData: undoableBoardData,
   boardCols: boardColsReducer,
   boardRows: boardRowsReducer,
   randomize: randomizeReducer,

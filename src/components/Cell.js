@@ -6,13 +6,13 @@ const Cell = (props) => {
     cell,
     className,
     cellSymbol,
-    clickHandler,
-    hoverHandler,
-    leaveHandler
+    onClick,
+    onHover,
+    onLeave
   } = props
 
-  const handleClick = (e) => clickHandler(e.target.id)
-  const handleHover = (e) => hoverHandler(e.target.id)
+  const handleClick = (e) => onClick(e.target.id)
+  const handleHover = (e) => onHover(e.target.id)
 
   return (
     <td
@@ -20,7 +20,7 @@ const Cell = (props) => {
       id={cell}
       onClick={handleClick}
       onMouseEnter={handleHover}
-      onMouseLeave={leaveHandler}
+      onMouseLeave={onLeave}
     >
       { cellSymbol }
     </td>
@@ -31,9 +31,9 @@ Cell.propTypes = {
   cell: PropTypes.string,
   className: PropTypes.string,
   cellMarker: PropTypes.string,
-  clickHandler: PropTypes.func,
-  hoverHandler: PropTypes.func,
-  leavehandler: PropTypes.func
+  onClick: PropTypes.func,
+  onHover: PropTypes.func,
+  onLeave: PropTypes.func
 }
 
 export default Cell

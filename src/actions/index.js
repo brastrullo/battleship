@@ -115,6 +115,17 @@ export const removeShipFromArray = (ship) => ({
   payload: ship
 })
 
+export const restoreShipToArray = (ship) => ({
+  type: type.RESTORE_SHIP_TO_ARRAY,
+  payload: ship
+})
+
+export const restoreAllShips = () => ({
+  type: type.RESTORE_ALL_SHIPS,
+  payload: null
+})
+
+
 // export const createBoard = (data) => ({
 //   type: type.CREATE_BOARD,
 //   data

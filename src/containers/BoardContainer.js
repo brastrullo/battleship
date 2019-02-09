@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Board from '../components/Board'
+import PlaceShipsSelectContainer from '../containers/PlaceShipsSelectContainer'
+import CellContainer from '../containers/CellContainer'
 import { shipSize } from '../constants'
-import { cellTaken, setCellData } from '../utils'
+import { cellTaken, setCellData, alphabet, l2n } from '../utils'
 import {
   setCellArray,
   emptyCellArray,
@@ -23,7 +24,6 @@ const BoardContainer = (props) => {
     clearSelectedShip,
     emptyCellArray,
     updateBoard,
-    placeShipHandler,
   } = props
 
   const shipData = {
@@ -47,28 +47,66 @@ const BoardContainer = (props) => {
     clearSelectedShip()
     emptyCellArray()
 
-    const board = Object.assign({}, boardData)
-    
+    const board = Array.from(boardData)
     Object.entries(cellData).forEach(cell => {
       const l = cell[0].split('')[0]
-      const n = cell[0].split('')[1] - 1
-      board[l][n] = cell[1]
+      const n = cell[0].substr(1) - 1
+      const id = l2n(l)
+      board[id][n] = cell[1]
     })
     updateBoard(board)
   }
 
+  // const boardRows = Array.from(Array(boardData[0].length).keys()).map(r => 0)
+  const boardRows = boardData[0]
+  const alphabetArr = alphabet.slice(0, boardData.length)
+  const header = [].concat('', alphabetArr)
+  const columns = header.map(cell => <th key={cell}>{cell}</th>)
+  const grid = boardRows.map((l, i) => {
+    const row = i + 1
+    return (
+      <tr key={row}>
+        <th>{row}</th>
+        {alphabetArr.map((letter, id) => {
+          const cell = `${letter}${row}`
+          const cellState = boardData[id][row - 1]
+          
+            return (
+              <CellContainer
+                shipData={shipData}
+                key={cell}
+                cell={cell}
+                cellState={cellState}
+                placeShipOnBoard={placeShipOnBoard}
+              />
+            )
+          })}
+      </tr>
+    )
+  })
+
   return (
-    <Board
-      boardData={boardData}
-      shipData={shipData}
-      placeShipOnBoard={placeShipOnBoard}
-    />
+    <div>
+      <PlaceShipsSelectContainer placeShipHandler={placeShipOnBoard} />
+      <div>
+        <table>
+          <thead>
+            <tr>
+              {columns}
+            </tr>
+          </thead>
+          <tbody>
+            {grid}
+          </tbody>
+        </table>
+      </div>
+    </div>
   )
 }
 
 const mapDispatchToProps  = (state) => {
   return {
-    boardData: state.boardData,
+    boardData: state.boardData.present,
     orientation: state.orientation,
     shipSelected: state.shipSelected,
     shipsArray: state.shipArray,

@@ -92,7 +92,7 @@ const CellContainer = (props) => {
 
 const mapDispatchToProps  = (state) => {
   return {
-    boardData: state.boardData,
+    boardData: state.boardData.present,
     cellSelected: state.cellSelected,
     cellHovered: state.cellHovered,
     cellArray: state.cellArray,
